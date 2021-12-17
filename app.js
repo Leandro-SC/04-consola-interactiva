@@ -4,8 +4,8 @@
 require('colors');
 
 //Funciones
-const {mostrarMenu, pausa} = require('./helpers/mensajes');
-
+const {inquirerMenu, pausa} = require('./helpers/inquirer');
+const Tareas = require('./models/multiTask');
 
 //Limpiar consola
 console.clear();
@@ -17,8 +17,9 @@ const main = async() => {
 
     do{ 
         //Mostrar el menu
-        opt = await mostrarMenu();
+        opt = await inquirerMenu();
         console.log({opt});
+     
 
         if(opt !== '0') await pausa();
         
