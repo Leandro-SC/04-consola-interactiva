@@ -1,6 +1,7 @@
 const inquirer = require('inquirer');
 require('colors');
 
+//Objeto de preguntas y valores de opciones
 const preguntas = [
     {
         type: 'list',
@@ -39,17 +40,19 @@ const preguntas = [
     }
 ];
 
+//Funcion mostrar menu
 const inquirerMenu = async() => {
     console.clear();
     console.log('=========================');
     console.log('Seleccione una opción'.green);
     console.log('=========================\n');
 
+    //Muestra pregunta y desestructura la respuesta solo con la opcion
     const {opcion} = await inquirer.prompt(preguntas);
-
     return opcion;
 }
 
+//Funcion pausar consola
 const pausa = async() => {
 
     //Variable de pregunta
@@ -62,13 +65,34 @@ const pausa = async() => {
     ];
 
     const {opcion} = await inquirer.prompt(pregunta);
-    
     return opcion;
 }
 
+//Funcion leer input
+const leerInput = async(message) => {
+    const question = [
+        {
+            type: 'input',
+            name: 'desc',
+            message,
+            validate: (value) =>{
+                if(value.length === 0){
+                    return 'Por favor ingrese una descripción';
+                }
+                return true;
+            }
+        }
+    ];
+    const {desc} = await inquirer.prompt(question);
+    return desc;
+
+}
+
+//Exportar funciones
 module.exports = {
     inquirerMenu,
-    pausa
+    pausa,
+    leerInput
 }
 
 

@@ -4,7 +4,13 @@
 require('colors');
 
 //Funciones
-const {inquirerMenu, pausa} = require('./helpers/inquirer');
+const {
+    inquirerMenu, 
+    pausa, 
+    leerInput
+} = require('./helpers/inquirer');
+const {guardarDB, leerDB} = require('./helpers/guardar');
+
 const Tareas = require('./models/multiTask');
 
 //Limpiar consola
@@ -13,14 +19,50 @@ console.clear();
 //Función Principal
 const main = async() => {
 
+    //Variables
     let opt = '';
+    //Instancias
+    const tareas = new Tareas();
+    const tareasDB = leerDB();
+    if(tareasDB){
+        //Establecer tareas
+        tareas.cargarTareasFromArray(tareasDB);
 
+    }
+    
+
+    //Ciclo para recorrer el menu en funcion a las opciones
     do{ 
-        //Mostrar el menu
+        //Imprimir el menu y retorna las opciones
         opt = await inquirerMenu();
-        console.log({opt});
-     
+        //Switch para las opciones
+        switch (opt) {
+            //Crear tarea
+            case '1':
+                const desc = await leerInput('Ingrese la descripción de la tarea: ');
+                tareas.crearTarea(desc);
+                break;
+            //Listar tareas    
+            case '2':
+                tareas.listadoCompleto();
+                break;
+            case '3':
+                tareas.listadoCompletos();
+                 break;    
+            case '4':
+                tareas.listadoPendientes();
+                break;    
+            case '5':
+                
+                break;    
+             case '6':
+                
+                break;                        
+        }
 
+        //Guardar
+        guardarDB(tareas.listadoArr);
+        //Pausa para continuar
         if(opt !== '0') await pausa();
         
     } while(opt !== '0');
