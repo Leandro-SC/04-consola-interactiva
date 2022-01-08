@@ -19,6 +19,12 @@ class MultiTask {
         this._listado = {};
     }
 
+    borrarTarea(id = '') {
+           if(this._listado[id]) {
+               delete this._listado[id];
+            }
+        }
+
     cargarTareasFromArray(tareas = []){
 
         tareas.forEach(tarea => {
@@ -74,6 +80,26 @@ class MultiTask {
         });
     }
 
+
+    toggleCompletadas(ids = []){
+
+        //Actualiza status de tareas completadas
+        ids.forEach(id => { 
+         const tarea = this._listado[id];
+         if(!tarea.status){
+           tarea.status = new Date().toISOString();
+         }
+    });
+
+    //Actualiza status de tareas pendientes
+    this.listadoArr.forEach(tarea => {
+        if(!ids.includes(tarea.id)){
+            const tarea = this._listado[tarea.id];
+            tarea.status = null;
+        }
+    })
+
+    }
 }
 
 

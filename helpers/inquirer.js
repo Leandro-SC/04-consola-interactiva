@@ -88,11 +88,86 @@ const leerInput = async(message) => {
 
 }
 
+//Metodo para borrar tareas
+const listadoTareasBorrar = async( tareas = []) => {
+
+    //Variable de pregunta
+    const choices = tareas.map( (tarea, i)=>{
+
+        const idx = `${i+1}.`.green + ` ${tarea.desc}`;
+        return {
+            value: tarea.id,
+            name: idx
+        }
+    });
+
+    choices.unshift({
+        value: '0',
+        name: `${'0.'.green} Cancelar`
+    });
+
+    const pregunta = [
+        {
+            type: 'list',
+            name: 'id',
+            message: 'Seleccione la tarea a eliminar',
+            choices
+        }
+    ]
+    const {id} = await inquirer.prompt(pregunta);
+    return id;
+}    
+
+//Metodo para confirmar accion de borrar
+const confirmar = async (message) => {
+
+    const pregunta = [
+        {
+            type: 'confirm',
+            name: 'ok',
+            message,
+        }
+    ];
+    const {ok} = await inquirer.prompt(pregunta);
+    return ok;
+
+}
+
+//Metodo para completar tareas
+const mostrarListadoCheckList = async( tareas = []) => {
+
+    //Variable de pregunta
+    const choices = tareas.map( (tarea, i)=>{
+
+        const idx = `${i+1}.`.green + ` ${tarea.desc}`;
+        return {
+            value: tarea.id,
+            name: idx,
+            checked: (tarea.status) ? true : false
+        }
+    });
+
+    const pregunta = [
+        {
+            type: 'checkbox',
+            name: 'ids',
+            message: 'Seleccione',
+            choices
+        }
+    ]
+    const {ids} = await inquirer.prompt(pregunta);
+    return ids;
+} 
+
+
 //Exportar funciones
 module.exports = {
     inquirerMenu,
     pausa,
-    leerInput
+    leerInput,
+    listadoTareasBorrar,
+    confirmar,
+    mostrarListadoCheckList
 }
 
 
